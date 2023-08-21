@@ -14,7 +14,7 @@ function styleOptionsToCssProperties({
   height,
   borderRadius,
   circle,
-  
+
   direction,
   duration,
   enableAnimation = defaultEnableAnimation,
@@ -55,6 +55,7 @@ export interface SkeletonProps extends SkeletonStyleProps {
   style?: CSSProperties;
 
   children?: React.ReactNode;
+  single?: boolean;
 }
 
 export function Skeleton({
@@ -70,6 +71,8 @@ export function Skeleton({
   style: styleProp,
 
   children,
+
+  single = false,
 
   ...originalPropsStyleOptions
 }: SkeletonProps): ReactElement {
@@ -130,20 +133,20 @@ export function Skeleton({
       thisStyle = { ...thisStyle, width: fractionalWidth };
     }
 
-    const SkeletonSpan = ({children}: any) => (
+    const SkeletonSpan = ({ children }: any) => (
       <div role="skeleton" className={className} style={thisStyle} key={i}>
         {children}
       </div>
     );
 
-    if (inline) {
-      elements.push(<SkeletonSpan/>);
+    if (inline || single) {
+      elements.push(<SkeletonSpan children={children}/>);
     } else {
       // Without the <br />, the skeleton lines will all run together if
       // `width` is specified
       elements.push(
         <React.Fragment key={i}>
-          <SkeletonSpan children={children}/>
+          <SkeletonSpan children={children} />
           <br />
         </React.Fragment>
       );
